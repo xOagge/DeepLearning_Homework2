@@ -42,12 +42,88 @@ import time
 # --------- Before Training ----------
 total_start = time.time()
 
+#Defining the CNN model with the nn.Module class, as suggested. This class will define
+# the CNN fixed as the indicated in the homework
+class BloodMNIST_CNN(nn.Module):
+    def __init__(self, n_classes):
+        super(BloodMNIST_CNN, self).__init__()
+        """layer 1: 
+            -Input image is RGB, so 3 channels
+            -Output: 32 channels feature map
+            -Kernel 3x3, size=3
+            -kernel slide with stride and padding 1
+        """
+        self.conv1 = nn.Conv2d(3, 32, kernel_size=3, stride=1, padding=1)
+        """layer 2: 
+            -Input: 32 channels feature map
+            -Output: 64 channels feature map
+            -Kernel 3x3, size=3
+            -kernel slide with stride and padding 1
+        """
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
+        """layer 3: 
+            -Input: 64 channels feature map
+            -Output: 128 channels feature map
+            -Kernel 3x3, size=3
+            -kernel slide with stride and padding 1
+        """
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1)
+        
+        """Linear Layer 1:
+            -Input: stride and padding 1 preserves the dimension of the height and width, so
+        Input feature map is 28x28x128, meaning number of activations in feature map is 28x28x128,
+            -Output: 256, specified in homework
+        """
+        self.fc1 = nn.Linear(128 * 28 * 28, 256)
+        """Linear Layer 2:
+            -Input: 256, number of outputs of previous layer
+            -Output: n_classes, to have a final classification of the input image of the model
+        """
+        self.fc2 = nn.Linear(256, n_classes) # 
+    
+
+    def forward(self, x, use_softmax=False):
+        # forward pass through convolution layers
+        x = nn.ReLU(self.conv1(x))
+        x = nn.ReLU(self.conv2(x))
+        x = nn.ReLU(self.conv3(x))
+        
+        # Flatten
+        x = x.view(x.size(0), -1)
+        
+        # Linear block
+        x = self.relu(self.fc1(x))
+        x = self.fc2(x)
+        
+        if use_softmax:
+            x = F.softmax(x, dim=1)
+            
+        return x
+
 #Training Function
 
 def train_epoch(loader, model, criterion, optimizer):
-    
-    ### YOUR CODE HERE ###
 
+    model.train() # Set model in training mode
+    total_loss = 0.0 # intiialize loss sum
+
+    # For each abtch: forward pass, loss calculation, backpropagation, model update
+    for imgs, labels in loader:
+        #reset optimizer gradient
+        optimizer.zero_grad()
+        #apply foward pass on the model, outputs is the prediction. shape: (n_examples x n_classes)
+        outputs = model(imgs)
+        #calculate loss of outputs respective to labels. loss is 0-dim tensor
+        loss = criterion(outputs, labels)
+        #applying backward() to tensor loss, torch backdates the used tensors to calculate loss
+        # , resulting in the dL/dW for each layer
+        loss.backward()
+        #updates model parameters according to W -> W - n * dL/dW. optimizer has access to the model parameters in its definition
+        optimizer.step()
+
+        total_loss += loss.item() #item is so that instead of 0-dim tensor we get float
+
+    #return average loss of the batches over this epoch
     return total_loss / len(loader)
 
 #Evaluation Function
@@ -74,6 +150,12 @@ def plot(epochs, plottable, ylabel='', name=''):
     plt.ylabel(ylabel)
     plt.plot(epochs, plottable)
     plt.savefig('%s.pdf' % (name), bbox_inches='tight')
+
+
+#hyperparameters
+batch_size = 64
+epochs = 30
+lr = 0.001
 
 train_dataset = BloodMNIST(split='train', transform=transform, download=True, size=28)
 val_dataset   = BloodMNIST(split='val',   transform=transform, download=True, size=28)
