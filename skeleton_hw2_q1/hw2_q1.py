@@ -29,7 +29,7 @@ print(device    )
 import random
 
 def resetSeed():
-    seed = 42
+    seed = 52 #used 42 in all report evolutions. 52 gives an usual result for model 2
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -265,7 +265,7 @@ class BloodMNIST_CNN(nn.Module):
         # return prediction of the model for the batch
         return x
     
-run_exercise(BloodMNIST_CNN, n_classes, False, "Q1_1_NoSoftmax")
+#run_exercise(BloodMNIST_CNN, n_classes, False, "Q1_1_NoSoftmax")
 run_exercise(BloodMNIST_CNN, n_classes, True, "Q1_1_YesSoftmax")
 
 
@@ -345,5 +345,5 @@ class BloodMNIST_CNN_MaxPool2d(nn.Module):
         # return prediction of the model for the batch
         return x
     
-run_exercise(BloodMNIST_CNN_MaxPool2d, n_classes, False, "Q1_2_NoSoftmax")
-run_exercise(BloodMNIST_CNN_MaxPool2d, n_classes, True, "Q1_2_YesSoftmax")
+#run_exercise(BloodMNIST_CNN_MaxPool2d, n_classes, False, "Q1_2_NoSoftmax")
+#run_exercise(BloodMNIST_CNN_MaxPool2d, n_classes, True, "Q1_2_YesSoftmax")
