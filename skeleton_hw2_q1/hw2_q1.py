@@ -207,6 +207,7 @@ class BloodMNIST_CNN(nn.Module):
     def __init__(self, n_classes, softmax_use=False):
         super(BloodMNIST_CNN, self).__init__()
         self.softmax_use = softmax_use
+        #L_out = ((L_in + 2P - K) / S)  + 1, for S=1, P=1, K=3, W and H remains the same
 
         # layer 1: 
         #     -Input image is RGB, so 3 channels
