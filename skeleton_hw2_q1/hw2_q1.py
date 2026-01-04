@@ -266,7 +266,7 @@ class BloodMNIST_CNN(nn.Module):
         # return prediction of the model for the batch
         return x
     
-#run_exercise(BloodMNIST_CNN, n_classes, False, "Q1_1_NoSoftmax")
+run_exercise(BloodMNIST_CNN, n_classes, False, "Q1_1_NoSoftmax")
 run_exercise(BloodMNIST_CNN, n_classes, True, "Q1_1_YesSoftmax")
 
 
@@ -346,5 +346,5 @@ class BloodMNIST_CNN_MaxPool2d(nn.Module):
         # return prediction of the model for the batch
         return x
     
-#run_exercise(BloodMNIST_CNN_MaxPool2d, n_classes, False, "Q1_2_NoSoftmax")
-#run_exercise(BloodMNIST_CNN_MaxPool2d, n_classes, True, "Q1_2_YesSoftmax")
+run_exercise(BloodMNIST_CNN_MaxPool2d, n_classes, False, "Q1_2_NoSoftmax")
+run_exercise(BloodMNIST_CNN_MaxPool2d, n_classes, True, "Q1_2_YesSoftmax")
