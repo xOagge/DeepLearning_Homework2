@@ -1,9 +1,8 @@
 torch
 numpy
 pandas
-scikit-learn
 scipy
 seaborn
 matplotlib
 openpyxl
-tqdm
+
